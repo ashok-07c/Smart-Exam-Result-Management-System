@@ -45,19 +45,29 @@ def _prepare_schema() -> None:
 
 def _seed_if_empty() -> None:
     with SessionLocal() as db:
-        if db.query(User).count() > 0:
-            logger.info("Users already present; skipping institution seed")
+        user_count = db.query(User).count()
+        if user_count > 0:
+            print(f"Users already present ({user_count}); skipping institution seed", flush=True)
             return
         # Imported lazily so the models are registered before the first query.
         from app.database.seed import seed_institution_db
 
-        logger.info("Seeding institution data for the first time")
+        print("Seeding institution data for the first time", flush=True)
         seed_institution_db(db, None)
 
 
 def bootstrap_database() -> None:
     """Prepare the database for serving requests. Safe to call on every boot."""
-    logger.info("Database bootstrap started")
-    _prepare_schema()
-    _seed_if_empty()
-    logger.info("Database bootstrap complete")
+    # Plain prints are used here because Alembic's logging config lowers the
+    # root logger level to WARN, which would otherwise hide these milestones.
+    print("Database bootstrap started", flush=True)
+    try:
+        _prepare_schema()
+        _seed_if_empty()
+    except Exception:
+        import traceback
+
+        traceback.print_exc()
+        print("Database bootstrap FAILED", flush=True)
+        raise
+    print("Database bootstrap complete", flush=True)
