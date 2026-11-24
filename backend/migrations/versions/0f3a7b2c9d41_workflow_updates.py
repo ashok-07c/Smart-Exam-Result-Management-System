@@ -46,8 +46,9 @@ def _as_dict(value) -> dict:
     return {}
 
 
-def _json_param(value: dict, dialect: str):
-    return json.dumps(value) if dialect == "sqlite" else value
+def _json_statement(statement: str, parameter: str):
+    """Bind a Python object through SQLAlchemy's JSON processor on every dialect."""
+    return sa.text(statement).bindparams(sa.bindparam(parameter, type_=sa.JSON()))
 
 
 def _add_internal_mark_columns(op_, dialect: str) -> None:
@@ -95,7 +96,8 @@ def upgrade() -> None:
     bind = op.get_bind()
     dialect = bind.dialect.name
 
-    op.add_column("users", sa.Column("must_change_password", sa.Boolean(), nullable=False, server_default=sa.text("0")))
+    # PostgreSQL rejects DEFAULT 0 for a boolean; sa.false() emits the portable form.
+    op.add_column("users", sa.Column("must_change_password", sa.Boolean(), nullable=False, server_default=sa.false()))
 
     op.add_column("examination_registrations", sa.Column("fee_receipt_path", sa.String(length=500), nullable=True))
     op.add_column("examination_registrations", sa.Column("fee_receipt_filename", sa.String(length=255), nullable=True))
@@ -138,8 +140,8 @@ def upgrade() -> None:
     subjects = bind.execute(sa.text("SELECT id FROM subjects")).fetchall()
     for row in subjects:
         bind.execute(
-            sa.text("UPDATE subjects SET assessment_configuration = :cfg WHERE id = :id"),
-            {"id": row.id, "cfg": _json_param({"components": NEW_COMPONENTS}, dialect)},
+            _json_statement("UPDATE subjects SET assessment_configuration = :cfg WHERE id = :id", "cfg"),
+            {"id": row.id, "cfg": {"components": NEW_COMPONENTS}},
         )
 
     marks = bind.execute(sa.text("SELECT id, component_marks FROM internal_marks")).fetchall()
@@ -151,13 +153,14 @@ def upgrade() -> None:
         best, other = max(mid1, mid2), min(mid1, mid2)
         total = _round(best * 0.8 + other * 0.2 + assignments)
         bind.execute(
-            sa.text(
+            _json_statement(
                 "UPDATE internal_marks SET mid1_marks = :m1, mid2_marks = :m2, "
-                "assignments_marks = :a, total_marks = :t, component_marks = :cfg WHERE id = :id"
+                "assignments_marks = :a, total_marks = :t, component_marks = :cfg WHERE id = :id",
+                "cfg",
             ),
             {
                 "id": row.id, "m1": mid1, "m2": mid2, "a": assignments, "t": total,
-                "cfg": _json_param({"MID-1": mid1, "MID-2": mid2, "Assignments": assignments}, dialect),
+                "cfg": {"MID-1": mid1, "MID-2": mid2, "Assignments": assignments},
             },
         )
 

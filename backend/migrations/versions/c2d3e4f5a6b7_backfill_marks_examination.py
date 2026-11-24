@@ -15,7 +15,7 @@ depends_on = None
 
 _EXAM_FOR_SUBJECT = (
     "SELECT es.examination_id FROM examination_subjects es "
-    "WHERE es.subject_id = {table}.subject_id AND es.is_eligible = 1 LIMIT 1"
+    "WHERE es.subject_id = {table}.subject_id AND es.is_eligible IS TRUE LIMIT 1"
 )
 
 
