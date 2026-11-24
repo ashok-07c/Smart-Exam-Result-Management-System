@@ -420,24 +420,28 @@ def seed_institution_db(db: Session, credentials_out: Path | None = None) -> lis
         )
         for code, meta in BRANCH_META.items()
     }
-    years = [
-        AcademicYear(
-            id=uuid4(), academic_year_name="2023-24", start_date=date(2023, 8, 1),
-            end_date=date(2024, 7, 31), status="ARCHIVED",
-        ),
-        AcademicYear(
-            id=uuid4(), academic_year_name="2024-25", start_date=date(2024, 8, 1),
-            end_date=date(2025, 7, 31), status="ARCHIVED",
-        ),
-        AcademicYear(
-            id=uuid4(), academic_year_name="2025-26", start_date=date(2025, 8, 1),
-            end_date=date(2026, 7, 31), status="ARCHIVED",
-        ),
-        AcademicYear(
-            id=uuid4(), academic_year_name="2026-27", start_date=date(2026, 8, 1),
-            end_date=date(2027, 7, 31), status="ACTIVE",
-        ),
+    # Alembic's workflow migration already inserts 2026-27. Reuse any years it
+    # created instead of inserting duplicate names into the unique index.
+    year_specs = [
+        ("2023-24", date(2023, 8, 1), date(2024, 7, 31), "ARCHIVED"),
+        ("2024-25", date(2024, 8, 1), date(2025, 7, 31), "ARCHIVED"),
+        ("2025-26", date(2025, 8, 1), date(2026, 7, 31), "ARCHIVED"),
+        ("2026-27", date(2026, 8, 1), date(2027, 7, 31), "ACTIVE"),
     ]
+    existing_years = {row.academic_year_name: row for row in db.query(AcademicYear).all()}
+    years: list[AcademicYear] = []
+    new_years: list[AcademicYear] = []
+    for name, start, end, status in year_specs:
+        existing = existing_years.get(name)
+        if existing:
+            years.append(existing)
+        else:
+            year_row = AcademicYear(
+                id=uuid4(), academic_year_name=name, start_date=start,
+                end_date=end, status=status,
+            )
+            years.append(year_row)
+            new_years.append(year_row)
     regulation = Regulation(
         id=uuid4(), regulation_name="R2024", effective_year="2024",
         grade_rules={}, pass_rules={}, calculation_rules={},
@@ -447,7 +451,7 @@ def seed_institution_db(db: Session, credentials_out: Path | None = None) -> lis
         number: Semester(id=uuid4(), semester_number=number, academic_year_id=year.id, regulation_id=regulation.id)
         for number in range(1, 9)
     }
-    db.add_all([*departments.values(), *branches.values(), *years, regulation, *semesters.values()])
+    db.add_all([*departments.values(), *branches.values(), *new_years, regulation, *semesters.values()])
     db.flush()
 
     courses = {

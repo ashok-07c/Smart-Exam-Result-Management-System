@@ -16,10 +16,16 @@ from app.database.session import Base, engine
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    # In development with SQLite, create tables automatically so local verification works
-    # without a migration tool. Production uses Alembic migrations exclusively.
-    if settings.is_sqlite:
+    # Hosts without shell access can opt into migrate + seed-once at startup.
+    if settings.auto_bootstrap:
+        from app.database.bootstrap import bootstrap_database
+
+        bootstrap_database()
+    elif settings.is_sqlite:
+        # In development with SQLite, create tables automatically so local verification works
+        # without a migration tool. Production uses Alembic migrations exclusively.
         import app.models  # noqa: F401 - register mappers
+
         Base.metadata.create_all(bind=engine)
     yield
 

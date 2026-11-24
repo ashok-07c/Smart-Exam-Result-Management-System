@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     certificate_verification_base_url: str = "http://localhost:5173/verify"
     upload_dir: str = "./uploads"
 
+    # Deployments without shell access can set AUTO_BOOTSTRAP=true. The app then
+    # applies Alembic migrations and seeds institution data once at startup.
+    auto_bootstrap: bool = False
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]

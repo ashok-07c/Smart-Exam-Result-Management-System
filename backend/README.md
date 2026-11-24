@@ -62,6 +62,7 @@ Edit `.env`:
 - `REFRESH_COOKIE_SECURE=true` when serving over HTTPS; keep `lax`/`strict` SameSite.
 - `APP_NAME` — exact product heading; `INSTITUTION_NAME`/`INSTITUTION_ADDRESS` — identity printed on PDFs.
 - `UPLOAD_DIR` — private directory for fee receipts (default `./uploads`). It is not served statically.
+- `AUTO_BOOTSTRAP=true` — optional for hosts without shell access; applies Alembic migrations and seeds institution data once during startup.
 
 ## Run
 
@@ -89,7 +90,7 @@ never used by the running app.
 - Health: `http://localhost:8000/health`
 - All business endpoints are under `/api/v1` (91 paths); `/health` is the only unversioned OpenAPI path, for 92 total.
 
-For SQLite local use, Alembic is optional: the app creates tables at startup. PostgreSQL deployments must run `alembic upgrade head` (Compose does this automatically).
+For SQLite local use, Alembic is optional: the app creates tables at startup. PostgreSQL deployments must run `alembic upgrade head` (Compose does this automatically). If shell access is unavailable, set `AUTO_BOOTSTRAP=true`; the app migrates on startup, stamps existing unversioned schemas, and seeds only when the `users` table is empty.
 
 ## Tests
 
