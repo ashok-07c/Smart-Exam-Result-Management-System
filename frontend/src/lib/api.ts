@@ -3,7 +3,13 @@ import type { ApiEnvelope } from './types';
 import { saveBlob, toQuery } from './utils';
 
 export const API_MODE: 'live' | 'mock' = import.meta.env.VITE_API_MODE === 'mock' ? 'mock' : 'live';
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1').replace(/\/$/, '');
+
+function apiBaseUrl(): string {
+  const configured = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1').replace(/\/$/, '');
+  return configured.endsWith('/api/v1') ? configured : `${configured}/api/v1`;
+}
+
+const API_BASE = apiBaseUrl();
 const TOKEN_KEY = 'smart-exam.access_token';
 const USER_KEY = 'smart-exam.user';
 
