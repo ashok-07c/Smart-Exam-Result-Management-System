@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 33% 97%;
+    --foreground: 216 39% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 216 39% 14%;
+    --primary: 221 76% 38%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 32% 93%;
+    --secondary-foreground: 216 39% 18%;
+    --muted: 214 28% 95%;
+    --muted-foreground: 215 16% 44%;
+    --accent: 199 89% 92%;
+    --accent-foreground: 221 76% 30%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 158 64% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 32 95% 44%;
+    --warning-foreground: 0 0% 100%;
+    --border: 214 27% 88%;
+    --input: 214 27% 88%;
+    --ring: 221 76% 45%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 216 39% 9%;
+    --foreground: 210 30% 95%;
+    --card: 216 34% 13%;
+    --card-foreground: 210 30% 95%;
+    --primary: 213 90% 66%;
+    --primary-foreground: 216 39% 10%;
+    --secondary: 216 30% 20%;
+    --secondary-foreground: 210 30% 95%;
+    --muted: 216 28% 18%;
+    --muted-foreground: 215 18% 68%;
+    --accent: 216 40% 22%;
+    --accent-foreground: 210 30% 96%;
+    --border: 216 25% 24%;
+    --input: 216 25% 24%;
+    --ring: 213 90% 66%;
+  }
+
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    min-width: 320px;
+  }
+  ::selection { @apply bg-primary/20; }
+}
+
+@layer components {
+  .surface {
+    @apply rounded-lg border border-border/80 bg-card shadow-soft;
+  }
+  .form-label {
+    @apply mb-1.5 block text-sm font-medium text-foreground;
+  }
+  .form-error {
+    @apply mt-1.5 text-xs font-medium text-destructive;
+  }
+  .subtle-grid {
+    background-image:
+      radial-gradient(circle at 1px 1px, hsl(var(--border) / .7) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin { scrollbar-width: thin; }
+  .table-compact th, .table-compact td { @apply whitespace-nowrap px-3 py-2.5; }
+}

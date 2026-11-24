@@ -1,0 +1,101 @@
+"""Shared enumerations. Exactly three primary roles are defined."""
+from enum import StrEnum
+
+
+class Role(StrEnum):
+    STUDENT = "STUDENT"
+    FACULTY = "FACULTY"
+    EXAM_ADMIN = "EXAM_ADMIN"
+
+
+class AccountStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    INACTIVE = "INACTIVE"
+    SUSPENDED = "SUSPENDED"
+
+
+class EnrollmentStatus(StrEnum):
+    ACTIVE = "ACTIVE"
+    GRADUATED = "GRADUATED"
+    SUSPENDED = "SUSPENDED"
+
+
+class ExamType(StrEnum):
+    REGULAR = "REGULAR"
+    SUPPLEMENTARY = "SUPPLEMENTARY"
+
+
+class RegistrationStatus(StrEnum):
+    DRAFT = "DRAFT"
+    SUBMITTED = "SUBMITTED"
+    CONFIRMED = "CONFIRMED"
+    CANCELLED = "CANCELLED"
+
+
+class SubmissionStatus(StrEnum):
+    DRAFT = "DRAFT"
+    IN_PROGRESS = "IN_PROGRESS"
+    SUBMITTED = "SUBMITTED"
+    RETURNED = "RETURNED"
+    VERIFIED = "VERIFIED"
+    LOCKED = "LOCKED"
+
+
+class CorrectionStatus(StrEnum):
+    SUBMITTED = "SUBMITTED"
+    UNDER_REVIEW = "UNDER_REVIEW"
+    RESOLVED = "RESOLVED"
+    REJECTED = "REJECTED"
+
+
+class PublicationStatus(StrEnum):
+    DRAFT = "DRAFT"
+    PROCESSING = "PROCESSING"
+    READY_FOR_REVIEW = "READY_FOR_REVIEW"
+    APPROVED = "APPROVED"
+    PUBLISHED = "PUBLISHED"
+
+
+class RecountingStatus(StrEnum):
+    SUBMITTED = "SUBMITTED"
+    PENDING_REVIEW = "PENDING_REVIEW"
+    PROCESSING = "PROCESSING"
+    COMPLETED = "COMPLETED"
+    REJECTED = "REJECTED"
+
+
+class NotificationCategory(StrEnum):
+    INTERNAL_MARKS = "INTERNAL_MARKS"
+    MARKS_CORRECTION = "MARKS_CORRECTION"
+    EXAM_REGISTRATION = "EXAM_REGISTRATION"
+    REGISTRATION_DEADLINE = "REGISTRATION_DEADLINE"
+    TIMETABLE = "TIMETABLE"
+    HALL_TICKET = "HALL_TICKET"
+    RESULT = "RESULT"
+    BACKLOG = "BACKLOG"
+    RECOUNTING = "RECOUNTING"
+    SUBJECT_ASSIGNMENT = "SUBJECT_ASSIGNMENT"
+    MARKS_SUBMISSION = "MARKS_SUBMISSION"
+    GENERAL = "GENERAL"
+
+
+class AudienceType(StrEnum):
+    ALL_STUDENTS = "ALL_STUDENTS"
+    ALL_FACULTY = "ALL_FACULTY"
+    SPECIFIC_BRANCH = "SPECIFIC_BRANCH"
+    SPECIFIC_SEMESTER = "SPECIFIC_SEMESTER"
+    SPECIFIC_CLASS = "SPECIFIC_CLASS"
+    SPECIFIC_USERS = "SPECIFIC_USERS"
+    ALL = "ALL"
+
+
+class SubjectType(StrEnum):
+    THEORY = "THEORY"
+    PRACTICAL = "PRACTICAL"
+    PROJECT = "PROJECT"
+
+
+class ResultStatus(StrEnum):
+    PASS = "PASS"
+    FAIL = "FAIL"
+    BACKLOG = "BACKLOG"

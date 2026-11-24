@@ -1,0 +1,31 @@
+code,name,branch
+CSE501,Design and Analysis of Algorithms,CSE
+CSE502,Database Management Systems,CSE
+CSE503,Operating Systems,CSE
+CSE504,Computer Networks,CSE
+CSE505,Machine Learning,CSE
+CSE506,Software Engineering,CSE
+EEE201,Electrical Machines-II,EEE
+EEE202,Power Systems-II,EEE
+EEE203,Power Electronics,EEE
+EEE204,Control Systems,EEE
+EEE205,Electrical Measurements,EEE
+EEE206,Microprocessors and Microcontrollers,EEE
+ECE401,Analog Communication,ECE
+ECE402,Digital Communication,ECE
+ECE403,Digital Signal Processing,ECE
+ECE404,Linear Integrated Circuits,ECE
+ECE405,Microprocessors and Microcontrollers,ECE
+ECE406,Electromagnetic Waves and Transmission Lines,ECE
+CIV101,Structural Analysis,CIVIL
+CIV102,Geotechnical Engineering,CIVIL
+CIV103,Transportation Engineering,CIVIL
+CIV104,Environmental Engineering,CIVIL
+CIV105,Fluid Mechanics,CIVIL
+CIV106,Concrete Technology,CIVIL
+ME301,Thermodynamics,MECHANICAL
+ME302,Fluid Mechanics,MECHANICAL
+ME303,Manufacturing Technology,MECHANICAL
+ME304,Heat Transfer,MECHANICAL
+ME305,Design of Machine Elements,MECHANICAL
+ME306,Dynamics of Machinery,MECHANICAL
